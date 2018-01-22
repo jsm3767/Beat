@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementTest : MonoBehaviour {
-
+public class Movement : MonoBehaviour {
 
     public float beatsPerMinute;
     public float spaceshipSpeed;
@@ -20,10 +19,10 @@ public class MovementTest : MonoBehaviour {
 
     public float time = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         timeBetweenBeats = 60 / beatsPerMinute;
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -38,6 +37,7 @@ public class MovementTest : MonoBehaviour {
         SlowShipDown();
     }
 
+
     void AddForce(Vector3 force)
     {
         acceleration += force.normalized * 10 / spaceshipWeight;
@@ -45,7 +45,7 @@ public class MovementTest : MonoBehaviour {
 
     void SlowShipDown()
     {
-       velocity 
+
     }
 
     void ApplyForceAwayFromMouseCursor()
@@ -69,5 +69,4 @@ public class MovementTest : MonoBehaviour {
         gameObject.transform.position = newPosition;
 
     }
-
 }
