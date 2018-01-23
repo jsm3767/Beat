@@ -27,12 +27,13 @@ public class GameManager : MonoBehaviour {
         enemies = new List<Enemy>();
         SpawnWave();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         timer += Time.deltaTime;
         Debug.Log(timer);
-        if(timer > milisecondsPerBeat)
+        if (timer > milisecondsPerBeat)
         {
             Pulse();
             timer -= milisecondsPerBeat;
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            foreach(Enemy e in enemies)
+            foreach (Enemy e in enemies)
             {
                 e.alive = false;
             }
@@ -67,25 +68,22 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+
     void SpawnWave()
     {
-        for( int i = 0; i < wave; i++)
+        for( int i =0; i < wave; i++)
         {
             GameObject e = Instantiate(EnemyPrefab);
-            Debug.Log(e);
             Enemy eScript = e.GetComponent<Enemy>();
-            Debug.Log(eScript);
             eScript.PlayerObject = playerOBJ;
             e.transform.position = new Vector3(Mathf.Sin(i)*20, Mathf.Cos(i)*20, 0);
             enemies.Add(eScript);
-            Debug.Log(enemies);
         }
     }
 
     void Pulse()
     {
         player.Pulse();
-
         
         foreach(Enemy e in enemies)
         {
@@ -96,6 +94,4 @@ public class GameManager : MonoBehaviour {
         }
         
     }
-
-
 }

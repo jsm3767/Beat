@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] float speed = 4.0f;
+    float speed = 4.0f;
     Vector2 mousePosition;
     
     private float moveSpeed = 5.0f;
@@ -25,6 +25,9 @@ public class Player : MonoBehaviour
        // float d = speed * Time.deltaTime;
         mousePosition = Camera.main.ScreenPointToRay( Input.mousePosition ).origin;
         vectorToMouse = mousePosition - (Vector2)transform.position;
+
+        Debug.Log( mousePosition );
+        
     }
 
     public Vector3 GetPosition()
@@ -34,14 +37,13 @@ public class Player : MonoBehaviour
 
     public void Pulse()
     {
-        rb.AddForce( -vectorToMouse.normalized * speed, ForceMode2D.Impulse );
-
-        float angle = Mathf.Atan2(vectorToMouse.y, vectorToMouse.x);
-        this.transform.rotation = new Quaternion(0, 0, 0, 0);
-        this.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
-
+        rb.AddForce( -vectorToMouse.normalized * 5.0f, ForceMode2D.Impulse );
         //shoot backward
-        GameObject newBullet = Instantiate(bulletPrefab);
-        newBullet.transform.position = gameObject.transform.position;
+    }
+
+    void shootBullet()
+    {
+        GameObject newbulletPrefab = Instantiate(bulletPrefab);
+        newbulletPrefab.GetComponent<Rigidbody2D>().AddForce(vectorToMouse.normalized * 10);
     }
 }
