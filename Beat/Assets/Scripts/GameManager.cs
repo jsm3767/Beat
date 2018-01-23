@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        wave = 3;
+        wave = 1;
         player = playerOBJ.GetComponent<Player>();
         milisecondsPerBeat = 60.0f / bpm;
         enemies = new List<Enemy>();
@@ -38,19 +38,45 @@ public class GameManager : MonoBehaviour {
             timer -= milisecondsPerBeat;
         }
 
-        
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            foreach(Enemy e in enemies)
+            {
+                e.alive = false;
+            }
+        }
+
+        List<Enemy> deadEnemies = new List<Enemy>();
+        foreach (Enemy e in enemies)
+        {
+            if (!e.alive)
+            {
+                deadEnemies.Add(e);
+            }
+        }
+
+        foreach (Enemy e in deadEnemies)
+        {
+            enemies.Remove(e);
+            Destroy(e.gameObject);
+        }
+
+        if (enemies.Count == 0)
+        {
+            wave++; SpawnWave();
+        }
     }
 
     void SpawnWave()
     {
-        for( int i =0; i < wave; i++)
+        for( int i = 0; i < wave; i++)
         {
             GameObject e = Instantiate(EnemyPrefab);
             Debug.Log(e);
             Enemy eScript = e.GetComponent<Enemy>();
             Debug.Log(eScript);
             eScript.PlayerObject = playerOBJ;
-            e.transform.position = new Vector3(Mathf.Sin(i)*10, Mathf.Cos(i)*10, 0);
+            e.transform.position = new Vector3(Mathf.Sin(i)*20, Mathf.Cos(i)*20, 0);
             enemies.Add(eScript);
             Debug.Log(enemies);
         }
@@ -59,16 +85,13 @@ public class GameManager : MonoBehaviour {
     void Pulse()
     {
         player.Pulse();
+
         
         foreach(Enemy e in enemies)
         {
             if (e.alive)
             {
                 e.Pulse();
-            }
-            else
-            {
-                e.enabled = false;
             }
         }
         
