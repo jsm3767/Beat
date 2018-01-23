@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    private float moveSpeed = 5.0f;
+    [SerializeField] private float moveSpeed = 5.0f;
 
     private Rigidbody2D rb;
 
@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public GameObject PlayerObject { get { return playerObject; } set { playerObject = value; } }
     private Player playerRef;
     private Vector2 vectorToPlayer;
+    public bool alive = true;
     
     bool started = false;
 
@@ -32,7 +33,7 @@ public class Enemy : MonoBehaviour
 
     public void Pulse()
     {
-        rb.AddForce(vectorToPlayer.normalized * 5.0f, ForceMode2D.Impulse);
+        rb.AddForce(vectorToPlayer.normalized * moveSpeed, ForceMode2D.Impulse);
     }
 }
 

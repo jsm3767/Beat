@@ -14,36 +14,64 @@ public class GameManager : MonoBehaviour {
 
     private float timer = 0;
     [SerializeField] float bpm = 176.0f;
-    private float secondsPerBeat = 0;
+    private float milisecondsPerBeat;
 
     public AudioSource test;
     public AudioSource song;
 
     // Use this for initialization
     void Start () {
-        wave = 0;
+        wave = 3;
         player = playerOBJ.GetComponent<Player>();
-        secondsPerBeat = 60.0f / (bpm / 2.0f);
+        milisecondsPerBeat = 60.0f / bpm;
+        enemies = new List<Enemy>();
+        SpawnWave();
     }
 	
 	// Update is called once per frame
 	void Update () {
         timer += Time.deltaTime;
-        if(timer > secondsPerBeat)
+        Debug.Log(timer);
+        if(timer > milisecondsPerBeat)
         {
             Pulse();
-            timer -= secondsPerBeat;
+            timer -= milisecondsPerBeat;
         }
 
+        
+    }
+
+    void SpawnWave()
+    {
+        for( int i =0; i < wave; i++)
+        {
+            GameObject e = Instantiate(EnemyPrefab);
+            Debug.Log(e);
+            Enemy eScript = e.GetComponent<Enemy>();
+            Debug.Log(eScript);
+            eScript.PlayerObject = playerOBJ;
+            e.transform.position = new Vector3(Mathf.Sin(i)*10, Mathf.Cos(i)*10, 0);
+            enemies.Add(eScript);
+            Debug.Log(enemies);
+        }
     }
 
     void Pulse()
     {
         player.Pulse();
+        
         foreach(Enemy e in enemies)
         {
-            e.Pulse();
+            if (e.alive)
+            {
+                e.Pulse();
+            }
+            else
+            {
+                e.enabled = false;
+            }
         }
+        
     }
 
 
