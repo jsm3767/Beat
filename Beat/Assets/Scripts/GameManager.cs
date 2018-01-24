@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
 	private List<Enemy> enemies;
+    private MoveTick[] ticks;
+
 	[SerializeField] private GameObject EnemyPrefab;
 
     [SerializeField] private GameObject playerOBJ;
@@ -14,16 +16,28 @@ public class GameManager : MonoBehaviour {
 
     private float timer = 0;
     [SerializeField] float bpm = 176.0f;
-    private float milisecondsPerBeat;
+    private float secondsPerBeat;
 
     public AudioSource test;
     public AudioSource song;
 
+    
+    public float Timer
+    {
+        get { return timer; }
+        set { timer = value; }
+    }
+    public float SecondsPerBeat
+    {
+        get { return secondsPerBeat; }
+        set { secondsPerBeat = value; }
+    }
     // Use this for initialization
     void Start () {
         wave = 1;
         player = playerOBJ.GetComponent<Player>();
-        milisecondsPerBeat = 60.0f / bpm;
+        ticks = FindObjectsOfType<MoveTick>();
+        secondsPerBeat = 60.0f / bpm;
         enemies = new List<Enemy>();
         SpawnWave();
     }
@@ -32,11 +46,11 @@ public class GameManager : MonoBehaviour {
     void Update()
     {
         timer += Time.deltaTime;
-        Debug.Log(timer);
-        if (timer > milisecondsPerBeat)
+        //Debug.Log(timer);
+        if (timer > secondsPerBeat)
         {
             Pulse();
-            timer -= milisecondsPerBeat;
+            timer -= secondsPerBeat;
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -85,6 +99,11 @@ public class GameManager : MonoBehaviour {
     {
         player.Pulse();
         
+        foreach( MoveTick t in ticks )
+        {
+            t.Pulse();
+        }
+
         foreach(Enemy e in enemies)
         {
             if (e.alive)

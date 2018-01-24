@@ -9,12 +9,14 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
 
     public GameObject playerObject;
-    public GameObject PlayerObject { get { return playerObject; } set { playerObject = value; } }
+    
     private Player playerRef;
     private Vector2 vectorToPlayer;
     public bool alive = true;
     
     bool started = false;
+
+    public GameObject PlayerObject { get { return playerObject; } set { playerObject = value; } }
 
     //private float offset = 0.585f; //time to wait before first beat starts
 
