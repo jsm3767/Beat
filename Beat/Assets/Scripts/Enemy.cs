@@ -37,6 +37,7 @@ public class Enemy : MonoBehaviour
     {
         rb.AddForce(vectorToPlayer.normalized * moveSpeed, ForceMode2D.Impulse);
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Bullet")

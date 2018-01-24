@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
         secondsPerBeat = 60.0f / bpm;
         enemies = new List<Enemy>();
         SpawnWave();
+        
     }
 
     // Update is called once per frame
