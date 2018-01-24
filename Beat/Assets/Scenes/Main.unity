@@ -213,6 +213,7 @@ MonoBehaviour:
   timer: 0
   tickPrefab: {fileID: 1534674160619880, guid: 0a9c595971dde384bb0ead26bcb8867c, type: 2}
   canvas: {fileID: 514207712}
+  middleTick: {fileID: 234177466}
   ticks: []
 --- !u!114 &514207714
 MonoBehaviour:

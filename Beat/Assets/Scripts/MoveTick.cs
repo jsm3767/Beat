@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveTick : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class MoveTick : MonoBehaviour
 
     public GameObject tickPrefab;
     public GameObject canvas;
+    public GameObject middleTick;
 
     public GameObject[] ticks;
     private List<Vector3> originalPositions = new List<Vector3>();
@@ -17,8 +19,6 @@ public class MoveTick : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-
-
         int position = 128;
         while (position < Screen.width)
         {
@@ -37,6 +37,8 @@ public class MoveTick : MonoBehaviour
         {
             originalPositions.Add(t.GetComponent<RectTransform>().localPosition);
         }
+
+        middleTick.transform.SetAsLastSibling();
     }
 
     // Update is called once per frame
@@ -44,7 +46,10 @@ public class MoveTick : MonoBehaviour
     {
         secondsPerBeat = gameManager.SecondsPerBeat;
         timer = gameManager.Timer;
-
+        if(timer > .1f)
+        {
+            middleTick.GetComponent<Image>().color = Color.white;
+        }
         if (timer == 0.0f)
         {
             return;
@@ -75,5 +80,6 @@ public class MoveTick : MonoBehaviour
         {
             ticks[index].GetComponent<RectTransform>().localPosition = originalPositions[index];
         }
+        middleTick.GetComponent<Image>().color = Color.blue;
     }
 }
