@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55d0f1ed277a6a34499a2cd1def65d54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 50
+  moveSpeed: 55
   playerObject: {fileID: 0}
   alive: 1
 --- !u!212 &212980475106971522

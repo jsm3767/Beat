@@ -13,8 +13,10 @@ public class Enemy : MonoBehaviour
     private Player playerRef;
     private Vector2 vectorToPlayer;
     public bool alive = true;
-    
     bool started = false;
+
+	private GameManager gm;
+	public GameManager GM { get { return gm; } set { gm = value; } }
 
     public GameObject PlayerObject { get { return playerObject; } set { playerObject = value; } }
 
@@ -35,7 +37,9 @@ public class Enemy : MonoBehaviour
 
     public void Pulse()
     {
-        rb.AddForce(vectorToPlayer.normalized * moveSpeed, ForceMode2D.Impulse);
+		Vector2 direction = new Vector2 (vectorToPlayer.x * (float)(Random.Range(80,120)/100.0f),vectorToPlayer.y * (float)(Random.Range(80,120)/100.0f));
+
+		rb.AddForce(direction.normalized * moveSpeed, ForceMode2D.Impulse);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -44,9 +48,9 @@ public class Enemy : MonoBehaviour
         {
             alive = false;
             Destroy(other.gameObject);
-            Debug.Log(other.gameObject.tag);
-        }
-            
+		}else if(other.gameObject.tag == "Player"){
+			gm.KillPlayer ();
+		}
     }
 
 }

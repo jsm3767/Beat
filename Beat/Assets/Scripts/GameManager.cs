@@ -8,20 +8,20 @@ public class GameManager : MonoBehaviour {
     private MoveTick[] ticks;
 
 	[SerializeField] private GameObject EnemyPrefab;
-
     [SerializeField] private GameObject playerOBJ;
 	private Player player;
 
 	int wave;
 
     private float timer = 0;
-    [SerializeField] float bpm = 176.0f;
+    float bpm = 176.0f;
     private float secondsPerBeat;
 
-    public AudioSource test;
-    public AudioSource song;
+	[SerializeField] private List<AudioClip> songs;
+	[SerializeField] private List<float> songBPM;
+	[SerializeField] private int track = 2;
+	private AudioSource audio;
 
-    
     public float Timer
     {
         get { return timer; }
@@ -34,13 +34,7 @@ public class GameManager : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        wave = 1;
-        player = playerOBJ.GetComponent<Player>();
-        ticks = FindObjectsOfType<MoveTick>();
-        secondsPerBeat = 60.0f / bpm;
-        enemies = new List<Enemy>();
-        SpawnWave();
-        
+		StartGame ();        
     }
 
     // Update is called once per frame
@@ -83,6 +77,25 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+	void StartGame(){
+		audio = GetComponent<AudioSource> ();
+		int trackNum = Random.Range (0, songs.Count);
+
+		trackNum = track;
+
+		AudioClip currentSong = songs[trackNum];
+		bpm = songBPM [trackNum];
+		audio.clip = currentSong;
+		audio.Play ();
+
+		wave = 1;
+		player = playerOBJ.GetComponent<Player>();
+		ticks = FindObjectsOfType<MoveTick>();
+		secondsPerBeat = 60.0f / bpm;
+		enemies = new List<Enemy>();
+		SpawnWave();
+	}
+
 
     void SpawnWave()
     {
@@ -91,7 +104,8 @@ public class GameManager : MonoBehaviour {
             GameObject e = Instantiate(EnemyPrefab);
             Enemy eScript = e.GetComponent<Enemy>();
             eScript.PlayerObject = playerOBJ;
-            e.transform.position = new Vector3(Mathf.Sin(i)*20, Mathf.Cos(i)*20, 0);
+			eScript.GM = this;
+			e.transform.position = new Vector3(Mathf.Sin(Random.Range(0,100))*130, Mathf.Cos(Random.Range(0,100))*70, 0);
             enemies.Add(eScript);
         }
     }
@@ -112,6 +126,9 @@ public class GameManager : MonoBehaviour {
                 e.Pulse();
             }
         }
-        
     }
+
+	public void KillPlayer(){
+		Application.LoadLevel (Application.loadedLevel);
+	}
 }
