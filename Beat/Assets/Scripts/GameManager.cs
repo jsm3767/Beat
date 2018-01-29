@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
 
     private List<Enemy> enemies;
-    private MoveTick[] ticks;
+    private MoveTick tick;
 
     [SerializeField] private GameObject EnemyPrefab;
     [SerializeField] private GameObject playerOBJ;
@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
 
         wave = 1;
         player = playerOBJ.GetComponent<Player>();
-        ticks = FindObjectsOfType<MoveTick>();
+        tick = FindObjectOfType<MoveTick>();
         secondsPerBeat = 60.0f / bpm;
         enemies = new List<Enemy>();
         SpawnWave();
@@ -118,10 +118,7 @@ public class GameManager : MonoBehaviour
     {
         player.Pulse();
 
-        foreach (MoveTick t in ticks)
-        {
-            t.Pulse();
-        }
+        tick.Pulse();
 
         foreach (Enemy e in enemies)
         {

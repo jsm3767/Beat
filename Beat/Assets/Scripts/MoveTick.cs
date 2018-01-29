@@ -15,6 +15,9 @@ public class MoveTick : MonoBehaviour
 
     public GameObject[] ticks;
     private List<Vector3> originalPositions = new List<Vector3>();
+
+    int limit = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -30,6 +33,10 @@ public class MoveTick : MonoBehaviour
             temp1.GetComponent<RectTransform>().localPosition = new Vector3(-position, -Screen.height/2.0f + 64, 0);
 
             position += 128;
+            if( position >= Screen.width)
+            {
+                limit = position - 128;
+            }
         }
         
         ticks = GameObject.FindGameObjectsWithTag("Tick");
@@ -74,13 +81,57 @@ public class MoveTick : MonoBehaviour
 
     }
 
+    public void EnqueuePowerUp()
+    {
+
+    }
+
+
     //reset ticks to original positions
     public void Pulse()
     {
+        Vector3 temp;
         for (int index = 0; index < ticks.Length; index++)
         {
-            ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(originalPositions[index].x, -Screen.height / 2.0f + 64, 0);
+            temp = originalPositions[index];
+
+            if (originalPositions[index].x < 0)
+            {
+                ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x +  128.0f, -Screen.height / 2.0f + 64, temp.z);
+            }
+            else
+            {
+                ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - 128.0f, -Screen.height / 2.0f + 64, temp.z);
+            }
         }
+        
+        int index0=-1;
+        int index1=-1;
+
+        for (int index = 0; index < ticks.Length; index++)
+        {
+            //10 is arbitrary just want the two closest might keep track of them later
+            if (System.Math.Abs(ticks[index].GetComponent<RectTransform>().localPosition.x) < 10f)
+            {
+                if( index0 == -1)
+                { 
+                    index0 = index;
+                }
+                else
+                {
+                    index1 = index;
+                }
+            }
+        }
+        ticks[index0].GetComponent<RectTransform>().localPosition = new Vector3(limit, -Screen.height / 2.0f + 64);
+        ticks[index1].GetComponent<RectTransform>().localPosition = new Vector3(-limit, -Screen.height / 2.0f + 64);
+        
+
+        for( int index = 0; index < ticks.Length; index++)
+        {
+            originalPositions[index] = ticks[index].GetComponent<RectTransform>().localPosition;
+        }
+        
         middleTick.GetComponent<Image>().color = Color.blue;
     }
 }
