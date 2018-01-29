@@ -1,26 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
-	private List<Enemy> enemies;
+    private List<Enemy> enemies;
     private MoveTick[] ticks;
 
-	[SerializeField] private GameObject EnemyPrefab;
+    [SerializeField] private GameObject EnemyPrefab;
     [SerializeField] private GameObject playerOBJ;
-	private Player player;
+    private Player player;
 
-	int wave;
+    int wave;
 
     private float timer = 0;
     float bpm = 176.0f;
     private float secondsPerBeat;
 
-	[SerializeField] private List<AudioClip> songs;
-	[SerializeField] private List<float> songBPM;
-	[SerializeField] private int track = 2;
-	private AudioSource audio;
+    [SerializeField] private List<AudioClip> songs;
+    [SerializeField] private List<float> songBPM;
+    [SerializeField] private int track = 2;
+    private AudioSource audio;
 
     public float Timer
     {
@@ -33,8 +35,9 @@ public class GameManager : MonoBehaviour {
         set { secondsPerBeat = value; }
     }
     // Use this for initialization
-    void Start () {
-		StartGame ();        
+    void Start()
+    {
+        StartGame();
     }
 
     // Update is called once per frame
@@ -77,35 +80,36 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-	void StartGame(){
-		audio = GetComponent<AudioSource> ();
-		int trackNum = Random.Range (0, songs.Count);
+    void StartGame()
+    {
+        audio = GetComponent<AudioSource>();
+        int trackNum = Random.Range(0, songs.Count);
 
-		trackNum = track;
+        trackNum = track;
 
-		AudioClip currentSong = songs[trackNum];
-		bpm = songBPM [trackNum];
-		audio.clip = currentSong;
-		audio.Play ();
+        AudioClip currentSong = songs[trackNum];
+        bpm = songBPM[trackNum];
+        audio.clip = currentSong;
+        audio.Play();
 
-		wave = 1;
-		player = playerOBJ.GetComponent<Player>();
-		ticks = FindObjectsOfType<MoveTick>();
-		secondsPerBeat = 60.0f / bpm;
-		enemies = new List<Enemy>();
-		SpawnWave();
-	}
+        wave = 1;
+        player = playerOBJ.GetComponent<Player>();
+        ticks = FindObjectsOfType<MoveTick>();
+        secondsPerBeat = 60.0f / bpm;
+        enemies = new List<Enemy>();
+        SpawnWave();
+    }
 
 
     void SpawnWave()
     {
-        for( int i =0; i < wave; i++)
+        for (int i = 0; i < wave; i++)
         {
             GameObject e = Instantiate(EnemyPrefab);
             Enemy eScript = e.GetComponent<Enemy>();
             eScript.PlayerObject = playerOBJ;
-			eScript.GM = this;
-			e.transform.position = new Vector3(Mathf.Sin(Random.Range(0,100))*130, Mathf.Cos(Random.Range(0,100))*70, 0);
+            eScript.GM = this;
+            e.transform.position = new Vector3(Mathf.Sin(Random.Range(0, 100)) * 130, Mathf.Cos(Random.Range(0, 100)) * 70, 0);
             enemies.Add(eScript);
         }
     }
@@ -113,13 +117,13 @@ public class GameManager : MonoBehaviour {
     void Pulse()
     {
         player.Pulse();
-        
-        foreach( MoveTick t in ticks )
+
+        foreach (MoveTick t in ticks)
         {
             t.Pulse();
         }
 
-        foreach(Enemy e in enemies)
+        foreach (Enemy e in enemies)
         {
             if (e.alive)
             {
@@ -128,7 +132,8 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-	public void KillPlayer(){
-		Application.LoadLevel (Application.loadedLevel);
-	}
+    public void KillPlayer()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
