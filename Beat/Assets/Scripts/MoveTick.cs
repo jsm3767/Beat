@@ -51,31 +51,31 @@ public class MoveTick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        middleTick.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, -Screen.height / 2.0f + 64, 0);
+        middleTick.GetComponent<RectTransform>().localPosition = new Vector3( 0.0f, -Screen.height / 2.0f + 64, 0 );
         secondsPerBeat = gameManager.SecondsPerBeat;
         timer = gameManager.Timer;
-        if(timer > .1f)
+        if( timer > .1f )
         {
             middleTick.GetComponent<Image>().color = Color.white;
         }
-        if (timer == 0.0f)
+        if( timer == 0.0f )
         {
             return;
         }
         //only allocate once and reuse
         Vector3 temp;
 
-        for (int index = 0; index < ticks.Length; index++)
+        for( int index = 0; index < ticks.Length; index++ )
         {
-            temp = originalPositions[index];
+            temp = originalPositions[ index ];
 
-            if (originalPositions[index].x < 0)
+            if( originalPositions[ index ].x < 0 )
             {
-                ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x + ((timer / secondsPerBeat) * 128.0f), -Screen.height / 2.0f + 64, temp.z);
+                ticks[ index ].GetComponent<RectTransform>().localPosition = new Vector3( temp.x + ( ( timer / secondsPerBeat ) * 128.0f ), -Screen.height / 2.0f + 64, temp.z );
             }
             else
             {
-                ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - ((timer / secondsPerBeat) * 128.0f), -Screen.height / 2.0f + 64, temp.z);
+                ticks[ index ].GetComponent<RectTransform>().localPosition = new Vector3( temp.x - ( ( timer / secondsPerBeat ) * 128.0f ), -Screen.height / 2.0f + 64, temp.z );
             }
         }
 

@@ -138,15 +138,19 @@ public class GameManager : MonoBehaviour
                 Debug.Log( halfHeight );
                 List<WaveEnemy> wave1 = new List<WaveEnemy>();
                 wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 0, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 0, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           0, EnemyType.Shooter ) );
                 wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 1, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 1, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           1, EnemyType.Shooter ) );
                 wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 2, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 2, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           2, EnemyType.Shooter ) );
                 wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 3, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 3, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           3, EnemyType.Shooter ) );
                 wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 4, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 4, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           4, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 5, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           5, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 6, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           6, EnemyType.Shooter ) );
 
                 StartCoroutine( SpawnWaveAsync( wave1 ) );
             }
