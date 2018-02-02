@@ -155,6 +155,11 @@ public class GameManager : MonoBehaviour
                 SpawnWave();
             }
         }
+        
+        if( player.transform.position.x < -halfWidth || player.transform.position.x > halfWidth || player.transform.position.y < -halfHeight || player.transform.position.y > halfHeight )
+        {
+            KillPlayer();
+        }
     }
 
     IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
