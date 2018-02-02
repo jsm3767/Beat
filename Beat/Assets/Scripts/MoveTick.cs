@@ -51,7 +51,7 @@ public class MoveTick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-//        middleTick.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, -Screen.height / 2.0f + 64, 0);
+        middleTick.GetComponent<RectTransform>().localPosition = new Vector3(0.0f, -Screen.height / 2.0f + 64, 0);
         secondsPerBeat = gameManager.SecondsPerBeat;
         timer = gameManager.Timer;
         if(timer > .1f)

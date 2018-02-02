@@ -201,7 +201,7 @@ public class GameManager : MonoBehaviour
         enemies.Add( e.GetComponent<Enemy>() );
     }
 
-    public 	void StartGame(int difficulty)
+    public void StartGame(int difficulty)
     {
         Debug.Log("Start Game");
 		int trackNum = difficulty;
