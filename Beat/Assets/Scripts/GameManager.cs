@@ -3,8 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public struct WaveEnemy
+{
+
+    public Vector2 spawnPosition;
+    public int beat;
+    public EnemyType enemyType;
+
+    public WaveEnemy( Vector2 spawnPosition_in, int beat_in, EnemyType enemyType_in )
+    {
+        spawnPosition = spawnPosition_in;
+        beat = beat_in;
+        enemyType = enemyType_in;
+    }
+}
+
+public enum EnemyType
+{
+    Basic,
+    Shooter
+}
+
+
 public class GameManager : MonoBehaviour
 {
+    private Dictionary<EnemyType, GameObject> enemyDictionary;
+    public GameObject shooterEnemy;
 
     private List<Enemy> enemies;
     private MoveTick tick;
@@ -26,6 +50,18 @@ public class GameManager : MonoBehaviour
 
 	bool gameStarted = false;
 
+    private float halfHeight;
+    private float halfWidth;
+
+    public float HalfHeight
+    {
+        get { return halfHeight; }
+    }
+    public float HalfWidth
+    {
+        get { return halfWidth; }
+    }
+
     public float Timer
     {
         get { return timer; }
@@ -46,7 +82,14 @@ public class GameManager : MonoBehaviour
 		audio.Play();
 		player = playerOBJ.GetComponent<Player>();
 		secondsPerBeat = 60.0f / bpm;
-		enemies = new List<Enemy>();
+
+        enemyDictionary = new Dictionary<EnemyType, GameObject>();
+        enemyDictionary.Add( EnemyType.Basic, EnemyPrefab );
+        enemyDictionary.Add( EnemyType.Shooter, shooterEnemy );
+        halfHeight = Camera.main.orthographicSize;
+        halfWidth = halfHeight * ( ( (float)Screen.width / (float)Screen.height ) );
+
+        enemies = new List<Enemy>();
 		tick = FindObjectOfType<MoveTick>();
     }
 
@@ -86,11 +129,74 @@ public class GameManager : MonoBehaviour
 
 		if (enemies.Count == 0 && gameStarted)
         {
-            wave++; SpawnWave();
+            wave++;
+            //Some hardcoding, TODO change
+            //for testing purposes
+            if( wave == 2 )
+            {
+                Debug.Log( halfWidth );
+                Debug.Log( halfHeight );
+                List<WaveEnemy> wave1 = new List<WaveEnemy>();
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 0, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 0, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 1, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 1, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 2, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 2, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 3, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 3, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 4, EnemyType.Shooter ) );
+                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ), 4, EnemyType.Shooter ) );
+
+                StartCoroutine( SpawnWaveAsync( wave1 ) );
+            }
+            else
+            {
+                SpawnWave();
+            }
         }
     }
 
-	public 	void StartGame(int difficulty)
+    IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
+    {
+        //int nBeats = wave.Count;
+
+        int max = -1;
+        int currentBeat = 0;
+        //need data for which enemy to spawn per beat and where to put them
+        for( int index = 0; index < wave.Count; index++ )
+        {
+            if( wave[ index ].beat > max )
+            {
+                max = wave[ index ].beat;
+            }
+        }
+
+        while( currentBeat < max )
+        {
+            for( int index = 0; index < wave.Count; index++ )
+            {
+                if( wave[ index ].beat == currentBeat )
+                {
+                    SpawnEnemy( wave[ index ].enemyType, wave[ index ].spawnPosition );
+                }
+            }
+
+            currentBeat++;
+            //TODO refactor later if this is too inaccurate
+            yield return new WaitForSeconds( secondsPerBeat );
+        }
+    }
+    void SpawnEnemy( EnemyType enemyType, Vector2 spawnPosition )
+    {
+        GameObject e = Instantiate( enemyDictionary[enemyType] );
+        e.SendMessage( "SetGameManager", this );
+        e.SendMessage( "SetPlayer", playerOBJ );
+        e.transform.position = spawnPosition;
+        enemies.Add( e.GetComponent<Enemy>() );
+    }
+
+    public 	void StartGame(int difficulty)
     {
         Debug.Log("Start Game");
 		int trackNum = difficulty;
@@ -137,7 +243,7 @@ public class GameManager : MonoBehaviour
             {
                 if (e.alive)
                 {
-                    e.Pulse();
+                    e.SendMessage( "Pulse" );
                 }
             }
         }
