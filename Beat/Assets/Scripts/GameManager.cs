@@ -88,6 +88,15 @@ public class GameManager : MonoBehaviour
         {
             wave++; SpawnWave();
         }
+
+        Vector3 screenEdgeLT = Camera.main.ViewportToWorldPoint(new Vector3(0, 1, 0));
+        Vector3 screenEdgeRB = Camera.main.ViewportToWorldPoint(new Vector3(1, 0, 0));
+        Debug.Log(screenEdgeLT);
+        Debug.Log(screenEdgeRB);
+        if (player.transform.position.x < screenEdgeLT.x || player.transform.position.x > screenEdgeRB.x || player.transform.position.y < screenEdgeRB.y || player.transform.position.y > screenEdgeLT.y)
+        {
+            KillPlayer();
+        }
     }
 
 	public 	void StartGame(int difficulty)
