@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
 
     public GameObject PlayerObject { get { return playerObject; } set { playerObject = value; } }
 
+    public bool started = false;
+
     //private float offset = 0.585f; //time to wait before first beat starts
 
     // Use this for initialization
@@ -27,6 +29,7 @@ public class Enemy : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         playerRef = playerObject.GetComponent<Player>();
+        started = true;
     }
 
     // Update is called once per frame
@@ -37,6 +40,11 @@ public class Enemy : MonoBehaviour
 
     public virtual void Pulse()
     {
+        if (!started)
+        {
+            Start();
+        }
+
         vectorToPlayer = playerRef.GetPosition() - this.transform.position;
         Vector2 direction = new Vector2 (vectorToPlayer.x * (float)(Random.Range(80,120)/100.0f),vectorToPlayer.y * (float)(Random.Range(80,120)/100.0f));
 		rb.AddForce(direction.normalized * moveSpeed, ForceMode2D.Impulse);

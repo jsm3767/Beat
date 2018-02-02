@@ -103,6 +103,8 @@ public class GameManager : MonoBehaviour
         secondsPerBeat = 60.0f / bpm;
         SpawnWave();
 		gameStarted = true;
+
+        player.transform.position = new Vector3(0, 0, 0);
     }
 
 
@@ -125,8 +127,10 @@ public class GameManager : MonoBehaviour
     {
         if (gameStarted)
         {
-            Debug.Log("First Pulse");
-            player.Pulse();
+            if (!Input.GetMouseButtonDown(0))
+            {
+                player.Pulse();
+            }
             tick.Pulse();
 
             foreach (Enemy e in enemies)
