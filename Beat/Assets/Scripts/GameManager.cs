@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        while( currentBeat < max )
+        while( currentBeat < max + 1 )
         {
             for( int index = 0; index < wave.Count; index++ )
             {
