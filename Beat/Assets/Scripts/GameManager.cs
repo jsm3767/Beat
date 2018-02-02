@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int track = 2;
     private AudioSource audio;
 
+	bool gameStarted = false;
+
     public float Timer
     {
         get { return timer; }
@@ -37,7 +39,15 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartGame();
+		audio = GetComponent<AudioSource>();
+		AudioClip currentSong = songs[2];
+		bpm = songBPM[2];
+		audio.clip = currentSong;
+		audio.Play();
+		player = playerOBJ.GetComponent<Player>();
+		secondsPerBeat = 60.0f / bpm;
+		enemies = new List<Enemy>();
+		tick = FindObjectOfType<MoveTick>();
     }
 
     // Update is called once per frame
@@ -74,58 +84,63 @@ public class GameManager : MonoBehaviour
             Destroy(e.gameObject);
         }
 
-        if (enemies.Count == 0)
+		if (enemies.Count == 0 && gameStarted)
         {
             wave++; SpawnWave();
         }
     }
 
-    void StartGame()
+	public 	void StartGame(int difficulty)
     {
-        audio = GetComponent<AudioSource>();
-        int trackNum = Random.Range(0, songs.Count);
-
-        trackNum = track;
-
+        Debug.Log("Start Game");
+		int trackNum = difficulty;
         AudioClip currentSong = songs[trackNum];
         bpm = songBPM[trackNum];
         audio.clip = currentSong;
         audio.Play();
 
         wave = 1;
-        player = playerOBJ.GetComponent<Player>();
-        tick = FindObjectOfType<MoveTick>();
         secondsPerBeat = 60.0f / bpm;
-        enemies = new List<Enemy>();
         SpawnWave();
+		gameStarted = true;
     }
 
 
     void SpawnWave()
     {
+        Debug.Log("Spawn Wave");
         for (int i = 0; i < wave; i++)
         {
             GameObject e = Instantiate(EnemyPrefab);
             Enemy eScript = e.GetComponent<Enemy>();
             eScript.PlayerObject = playerOBJ;
             eScript.GM = this;
-            e.transform.position = new Vector3(Mathf.Sin(Random.Range(0, 100)) * 130, Mathf.Cos(Random.Range(0, 100)) * 70, 0);
+            float angle = Random.Range(0, 100);
+            e.transform.position = new Vector3(Mathf.Sin(angle) * 130, Mathf.Cos(angle) * 70, 0);
             enemies.Add(eScript);
         }
     }
 
     void Pulse()
     {
-        player.Pulse();
-
-        tick.Pulse();
-
-        foreach (Enemy e in enemies)
+        if (gameStarted)
         {
-            if (e.alive)
+            Debug.Log("First Pulse");
+            player.Pulse();
+            tick.Pulse();
+
+            foreach (Enemy e in enemies)
             {
-                e.Pulse();
+                if (e.alive)
+                {
+                    e.Pulse();
+                }
             }
+        }
+        else
+        {
+            player.Pulse();
+            tick.Pulse();
         }
     }
 
