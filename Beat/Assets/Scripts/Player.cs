@@ -14,9 +14,12 @@ public class Player : MonoBehaviour
 
     public GameObject bulletPrefab;
     // Use this for initialization
+
+    public ParticleSystem gunSmoke;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        gunSmoke = gameObject.GetComponent<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -39,6 +42,10 @@ public class Player : MonoBehaviour
         float angle = Mathf.Atan2(vectorToMouse.y, vectorToMouse.x);
         this.transform.rotation = new Quaternion(0, 0, 0, 0);
         this.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
+
+        gunSmoke.Play();
+        Debug.Log(Time.fixedTime);
+        gunSmoke.startColor = new Color(Time.fixedTime%1, Time.fixedTime/2 % 1, Time.fixedTime/3 % 1);
 
         //shoot backward
         GameObject newBullet = Instantiate(bulletPrefab);
