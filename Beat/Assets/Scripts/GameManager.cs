@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
     private float halfHeight;
     private float halfWidth;
 
+    private int shake = 0;
+
     public float HalfHeight
     {
         get { return halfHeight; }
@@ -96,6 +98,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         timer += Time.deltaTime;
         //Debug.Log(timer);
         if (timer > secondsPerBeat)
@@ -163,6 +166,16 @@ public class GameManager : MonoBehaviour
         if( player.transform.position.x < -halfWidth || player.transform.position.x > halfWidth || player.transform.position.y < -halfHeight || player.transform.position.y > halfHeight )
         {
             KillPlayer();
+        }
+
+        if (shake > 0)
+        {
+            Camera.main.transform.position += ((Vector3)Random.insideUnitCircle);
+            shake--;
+        }
+        else
+        {
+            Camera.main.transform.position = new Vector3(0, 0, -10);
         }
     }
 
@@ -261,6 +274,8 @@ public class GameManager : MonoBehaviour
             player.Pulse();
             tick.Pulse();
         }
+
+        shake = 1;
     }
 
     public void KillPlayer()
