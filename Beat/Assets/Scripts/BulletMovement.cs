@@ -10,6 +10,8 @@ public class BulletMovement : MonoBehaviour
 
     public Rigidbody2D bulletRidgidBody;
 
+    [SerializeField] float bulletSpeed = 15;
+
     // Use this for initialization
     void Start()
     {
@@ -21,7 +23,12 @@ public class BulletMovement : MonoBehaviour
     public void FireBullet(Vector3 direction)
     {
         bulletRidgidBody = GetComponent<Rigidbody2D>();
-        bulletRidgidBody.AddForce(direction * 15);
+        bulletRidgidBody.AddForce(direction * bulletSpeed);
+
+        float angle = Mathf.Atan2(direction.y, direction.x);
+        this.transform.rotation = new Quaternion(0, 0, 0, 0);
+        this.transform.RotateAroundLocal(new Vector3(0, 0, 1), angle - Mathf.PI / 2);
+
         //gameObject.transform.forward = (gameObject.transform.position + direction) - gameObject.transform.position;
         //float angle = Mathf.Atan2(gameObject.transform.position.y + direction.y, gameObject.transform.position.x - direction.x);
         //this.transform.rotation = new Quaternion(0, 0, 0, 0);

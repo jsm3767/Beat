@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
 
 public struct WaveEnemy
 {
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour
     private float halfWidth;
 
     private int shake = 0;
+    private VignetteAndChromaticAberration ChromAbb;
+    [SerializeField] GameObject mainCamOBJ;
 
     public float HalfHeight
     {
@@ -97,6 +100,8 @@ public class GameManager : MonoBehaviour
 
         enemies = new List<Enemy>();
 		tick = FindObjectOfType<MoveTick>();
+
+        ChromAbb = mainCamOBJ.GetComponent<VignetteAndChromaticAberration>();
     }
 
     // Update is called once per frame
@@ -169,7 +174,14 @@ public class GameManager : MonoBehaviour
         
         if( player.transform.position.x < -halfWidth || player.transform.position.x > halfWidth || player.transform.position.y < -halfHeight || player.transform.position.y > halfHeight )
         {
-            KillPlayer();
+            if (gameStarted)
+            {
+                KillPlayer();
+            }
+            else
+            {
+                player.transform.position = new Vector3(0, 0, 0);
+            }
         }
 
         if (shake > 0)
@@ -181,6 +193,12 @@ public class GameManager : MonoBehaviour
         {
             Camera.main.transform.position = new Vector3(0, 0, -10);
         }
+
+        if(ChromAbb.chromaticAberration > 0)
+        {
+            ChromAbb.chromaticAberration-=5;
+        }
+        
     }
 
     IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
@@ -283,6 +301,7 @@ public class GameManager : MonoBehaviour
         }
 
         shake = 1;
+        ChromAbb.chromaticAberration = 30;
     }
 
     public void AddPowerUp(string powerupname, int delay)

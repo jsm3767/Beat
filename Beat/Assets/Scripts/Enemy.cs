@@ -23,6 +23,8 @@ public class Enemy : MonoBehaviour
 
     public bool started = true;
 
+    [SerializeField] private GameObject explosion;
+
     //private float offset = 0.585f; //time to wait before first beat starts
 
     // Use this for initialization
@@ -46,6 +48,11 @@ public class Enemy : MonoBehaviour
         vectorToPlayer = playerRef.GetPosition() - this.transform.position;
         Vector2 direction = new Vector2 (vectorToPlayer.x * (float)(Random.Range(80,120)/100.0f),vectorToPlayer.y * (float)(Random.Range(80,120)/100.0f));
         rb.AddForce( direction.normalized * moveSpeed, ForceMode2D.Impulse );
+
+
+        float angle = Mathf.Atan2(vectorToPlayer.y, vectorToPlayer.x);
+        this.transform.rotation = new Quaternion(0, 0, 0, 0);
+        this.transform.RotateAroundLocal(new Vector3(0, 0, 1), angle - Mathf.PI / 2);
     }
 
     public virtual void OnTriggerEnter2D( Collider2D other )
@@ -54,10 +61,16 @@ public class Enemy : MonoBehaviour
         {
             alive = false;
             Destroy( other.gameObject );
+            GameObject explOBJ = GameObject.Instantiate(explosion);
+            explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+            explOBJ.transform.position = this.gameObject.transform.position;
         }
         else if( other.gameObject.tag == "Player" )
         {
             gm.KillPlayer();
+            GameObject explOBJ = GameObject.Instantiate(explosion);
+            explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+            explOBJ.transform.position = this.gameObject.transform.position;
         }
     }
 

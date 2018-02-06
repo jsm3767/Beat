@@ -48,13 +48,18 @@ public class Player : MonoBehaviour
         this.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
 
         gunSmoke.Play();
-        gunSmoke.startColor = new Color(Time.fixedTime%1, Time.fixedTime/2 % 1, Time.fixedTime/3 % 1);
-		gunSmoke2.startColor = new Color(Time.fixedTime%1, Time.fixedTime/2 % 1, Time.fixedTime/3 % 1);
+        Color bulletColor = new Color(Time.fixedTime % 1, Time.fixedTime / 2 % 1, Time.fixedTime / 3 % 1);
+
+        gunSmoke.startColor = bulletColor;
+        gunSmoke2.startColor = bulletColor;
+
+        bulletPrefab.GetComponent<SpriteRenderer>().color = bulletColor;
 
         //shoot backward
         GameObject newBullet = Instantiate(bulletPrefab);
         newBullet.transform.position = gameObject.transform.position;
         newBullet.GetComponent<BulletMovement>().FireBullet(vectorToMouse.normalized * speed * 2);
+        newBullet.GetComponent<ParticleSystem>().startColor = bulletColor;
     }
 
 }
