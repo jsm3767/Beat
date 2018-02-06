@@ -28,12 +28,6 @@ public class BulletMovement : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x);
         this.transform.rotation = new Quaternion(0, 0, 0, 0);
         this.transform.RotateAroundLocal(new Vector3(0, 0, 1), angle - Mathf.PI / 2);
-
-        //gameObject.transform.forward = (gameObject.transform.position + direction) - gameObject.transform.position;
-        //float angle = Mathf.Atan2(gameObject.transform.position.y + direction.y, gameObject.transform.position.x - direction.x);
-        //this.transform.rotation = new Quaternion(0, 0, 0, 0);
-        //this.transform.RotateAroundLocal(new Vector3(1, 0, 0), 45);
-        //this.transform.RotateAroundLocal(new Vector3(0, 0, 1), 45);
     }
 
     // Update is called once per frame

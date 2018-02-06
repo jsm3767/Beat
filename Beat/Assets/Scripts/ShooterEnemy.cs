@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//zig zags down the screen, dies off screen
 public class ShooterEnemy : Enemy
 {
     private float circleRadius = 200.0f;

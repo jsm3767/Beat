@@ -22,14 +22,17 @@ public struct WaveEnemy
 public enum EnemyType
 {
     Basic,
-    Shooter
+    Shooter,
+    Circling
 }
 
 
 public class GameManager : MonoBehaviour
 {
     private Dictionary<EnemyType, GameObject> enemyDictionary;
+
     public GameObject shooterEnemy;
+    public GameObject circlingEnemy;
 
     private List<Enemy> enemies;
     private MoveTick tick;
@@ -95,6 +98,8 @@ public class GameManager : MonoBehaviour
         enemyDictionary = new Dictionary<EnemyType, GameObject>();
         enemyDictionary.Add( EnemyType.Basic, EnemyPrefab );
         enemyDictionary.Add( EnemyType.Shooter, shooterEnemy );
+        enemyDictionary.Add( EnemyType.Circling, circlingEnemy);
+
         halfHeight = Camera.main.orthographicSize;
         halfWidth = halfHeight * ( ( (float)Screen.width / (float)Screen.height ) );
 
@@ -144,27 +149,47 @@ public class GameManager : MonoBehaviour
             wave++;
             //Some hardcoding, TODO change
             //for testing purposes
-            if( wave == 2 )
+            if( wave == 3 )
             {
                 Debug.Log( halfWidth );
                 Debug.Log( halfHeight );
                 List<WaveEnemy> wave1 = new List<WaveEnemy>();
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 0, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           0, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 1, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           1, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 2, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           2, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 3, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           3, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 4, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           4, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 5, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           5, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight ) ), 6, EnemyType.Shooter ) );
-                wave1.Add( new WaveEnemy( new Vector2( +( halfWidth ), 0.0f ),           6, EnemyType.Shooter ) );
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 0, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 0, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 1, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 1, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 2, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 2, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 3, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 3, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 4, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 4, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 5, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 5, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(-(halfWidth), (halfHeight)), 6, EnemyType.Shooter));
+                wave1.Add(new WaveEnemy(new Vector2(+(halfWidth), 0.0f), 6, EnemyType.Shooter));
 
                 StartCoroutine( SpawnWaveAsync( wave1 ) );
+            }
+            else if( wave == 2 )
+            {
+                List<WaveEnemy> wave2 = new List<WaveEnemy>();
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    0, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    1, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    2, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    3, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    4, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    5, EnemyType.Circling));
+                wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
+                    6, EnemyType.Circling));
+
+                StartCoroutine(SpawnWaveAsync(wave2));
             }
             else
             {
@@ -231,8 +256,12 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds( secondsPerBeat );
         }
     }
-    void SpawnEnemy( EnemyType enemyType, Vector2 spawnPosition )
+    void SpawnEnemy(EnemyType enemyType, Vector2 spawnPosition)
     {
+        if (enemyType == EnemyType.Circling)
+        {
+            int x = 0;
+        }
         GameObject e = Instantiate( enemyDictionary[enemyType] );
         e.SendMessage( "SetGameManager", this );
         e.SendMessage( "SetPlayer", playerOBJ );
@@ -312,7 +341,7 @@ public class GameManager : MonoBehaviour
 
 
     void PowerUpPulse()
-    {;
+    {
         for (int i = 0; i < activePowerUps.Count; i++)
         {
             if (timerForActivePowerUps[i] > 0)
