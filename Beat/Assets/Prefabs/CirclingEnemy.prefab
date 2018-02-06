@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61602397382765732}
   - component: {fileID: 50171217549696778}
   m_Layer: 0
-  m_Name: ShooterEnemy
+  m_Name: CirclingEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,6 +103,7 @@ MonoBehaviour:
   playerObject: {fileID: 0}
   alive: 1
   started: 1
+  explosion: {fileID: 0}
 --- !u!212 &212980475106971522
 SpriteRenderer:
   m_ObjectHideFlags: 1

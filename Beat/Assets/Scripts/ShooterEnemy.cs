@@ -62,8 +62,12 @@ public class ShooterEnemy : Enemy
         }
         rb.AddForce( moveVector, ForceMode2D.Impulse );
 
+        float angle = Mathf.Atan2(moveVector.y, moveVector.x);
+        this.transform.rotation = new Quaternion(0, 0, 0, 0);
+        this.transform.RotateAroundLocal(new Vector3(0, 0, 1), angle - Mathf.PI / 2);
 
-        if( transform.position.y < -( gm.HalfHeight ) || transform.position.y > ( gm.HalfHeight ) )
+
+        if ( transform.position.y < -( gm.HalfHeight ) || transform.position.y > ( gm.HalfHeight ) )
         {
             alive = false;
         }
