@@ -38,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject EnemyPrefab;
     [SerializeField] private GameObject playerOBJ;
+    [SerializeField] private GameObject powerUp;
+    [SerializeField] private GameObject bulletprefab;
+    public List<string> activePowerUps;
+    public List<int> timerForActivePowerUps;
     private Player player;
 
     int wave;
@@ -55,6 +59,8 @@ public class GameManager : MonoBehaviour
 
     private float halfHeight;
     private float halfWidth;
+
+    private int shake = 0;
 
     public float HalfHeight
     {
@@ -101,6 +107,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         timer += Time.deltaTime;
         //Debug.Log(timer);
         if (timer > secondsPerBeat)
@@ -189,6 +196,16 @@ public class GameManager : MonoBehaviour
         {
             KillPlayer();
         }
+
+        if (shake > 0)
+        {
+            Camera.main.transform.position += ((Vector3)Random.insideUnitCircle);
+            shake--;
+        }
+        else
+        {
+            Camera.main.transform.position = new Vector3(0, 0, -10);
+        }
     }
 
     IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
@@ -247,6 +264,8 @@ public class GameManager : MonoBehaviour
         secondsPerBeat = 60.0f / bpm;
         SpawnWave();
 		gameStarted = true;
+        activePowerUps = new List<string>();
+        timerForActivePowerUps = new List<int>();
 
         player.transform.position = new Vector3(0, 0, 0);
     }
@@ -276,7 +295,7 @@ public class GameManager : MonoBehaviour
                 player.Pulse();
             }
             tick.Pulse();
-
+            PowerUpPulse();
             foreach (Enemy e in enemies)
             {
                 if (e.alive)
@@ -287,8 +306,53 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            PowerUpPulse();
             player.Pulse();
             tick.Pulse();
+        }
+
+        shake = 1;
+    }
+
+    public void AddPowerUp(string powerupname, int delay)
+    {
+        activePowerUps.Add(powerupname);
+        timerForActivePowerUps.Add(delay);
+    }
+
+
+    void PowerUpPulse()
+    {
+        for (int i = 0; i < activePowerUps.Count; i++)
+        {
+            if (timerForActivePowerUps[i] > 0)
+            {
+                timerForActivePowerUps[i]--;
+                Debug.Log(timerForActivePowerUps[i]);
+            }
+            else
+            {
+                switch (activePowerUps[i])
+                {
+                    case "TestPowerUp":
+                        for (int d = 0; d < 8; d++)
+                        {
+                            GameObject newbullet = Instantiate(bulletprefab);
+                            Vector3 newPos = new Vector3(0, 1, 0);
+                            newPos = Quaternion.AngleAxis(45 * d, Vector3.forward) * newPos;
+                            newbullet.transform.position = player.transform.position + (newPos * 2);
+                            Debug.Log(newPos.x);
+                            newbullet.GetComponent<BulletMovement>().FireBullet(newPos * 100);
+                        }
+                        break;
+                }
+                activePowerUps.RemoveAt(i);
+                timerForActivePowerUps.RemoveAt(i);
+                i--;
+            }
+        }
+        for (int i = 0; i < activePowerUps.Count; i++)
+        {
         }
     }
 
