@@ -293,7 +293,7 @@ public class GameManager : MonoBehaviour
 
 
     void PowerUpPulse()
-    {;
+    {
         for (int i = 0; i < activePowerUps.Count; i++)
         {
             if (timerForActivePowerUps[i] > 0)
