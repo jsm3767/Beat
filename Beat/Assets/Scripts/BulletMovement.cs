@@ -9,20 +9,24 @@ public class BulletMovement : MonoBehaviour
     private Vector2 vectorToMouse;
 
     public Rigidbody2D bulletRidgidBody;
-    public float forceMult = 50;
 
     // Use this for initialization
     void Start()
     {
         bulletRidgidBody = GetComponent<Rigidbody2D>();
-        mousePosition = Camera.main.ScreenPointToRay(Input.mousePosition).origin;
-        vectorToMouse = mousePosition - (Vector2)transform.position;
-        bulletRidgidBody.AddForce(vectorToMouse.normalized * forceMult, ForceMode2D.Impulse);
-        float angle = Mathf.Atan2(-vectorToMouse.y, -vectorToMouse.x);
-        this.transform.rotation = new Quaternion(0, 0, 0, 0);
-        this.transform.RotateAroundLocal(new Vector3(0, 0, 1), angle + Mathf.PI / 2);
 
         Destroy(this, 10);
+    }
+
+    public void FireBullet(Vector3 direction)
+    {
+        bulletRidgidBody = GetComponent<Rigidbody2D>();
+        bulletRidgidBody.AddForce(direction * 15);
+        //gameObject.transform.forward = (gameObject.transform.position + direction) - gameObject.transform.position;
+        //float angle = Mathf.Atan2(gameObject.transform.position.y + direction.y, gameObject.transform.position.x - direction.x);
+        //this.transform.rotation = new Quaternion(0, 0, 0, 0);
+        //this.transform.RotateAroundLocal(new Vector3(1, 0, 0), 45);
+        //this.transform.RotateAroundLocal(new Vector3(0, 0, 1), 45);
     }
 
     // Update is called once per frame
@@ -31,5 +35,5 @@ public class BulletMovement : MonoBehaviour
 
     }
 
-   
+
 }
