@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Bullet
   - Tick
+  - gunsmoke2
   layers:
   - Default
   - TransparentFX

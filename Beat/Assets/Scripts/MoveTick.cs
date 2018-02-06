@@ -51,12 +51,11 @@ public class MoveTick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //middleTick.GetComponent<RectTransform>().localPosition = new Vector3( 0.0f, -Screen.height / 2.0f + 64, 0 );
         secondsPerBeat = gameManager.SecondsPerBeat;
         timer = gameManager.Timer;
         if( timer > .1f )
         {
-            middleTick.GetComponent<Image>().color = Color.white;
+			middleTick.GetComponent<Image>().color = new Color(1,1,1,(float)(128.0/255.0));
         }
         if( timer == 0.0f )
         {
@@ -71,12 +70,10 @@ public class MoveTick : MonoBehaviour
 
             if( originalPositions[ index ].x < 0 )
             {
-                //ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x + ((timer / secondsPerBeat) * 128.0f), -Screen.height / 2.0f + 64, temp.z);
                 ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x + ((timer / secondsPerBeat) * 128.0f), middleTick.GetComponent<RectTransform>().localPosition.y, temp.z);
             }
             else
             {
-                //ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - ((timer / secondsPerBeat) * 128.0f), -Screen.height / 2.0f + 64, temp.z);
                 ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - ((timer / secondsPerBeat) * 128.0f), middleTick.GetComponent<RectTransform>().localPosition.y, temp.z);
             }
         }
@@ -99,12 +96,10 @@ public class MoveTick : MonoBehaviour
 
             if (originalPositions[index].x < 0)
             {
-                //ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x + 128.0f, -Screen.height / 2.0f + 64, temp.z);
                 ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x + 128.0f, middleTick.GetComponent<RectTransform>().localPosition.y, temp.z);
             }
             else
             {
-                //ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - 128.0f, -Screen.height / 2.0f + 64, temp.z);
                 ticks[index].GetComponent<RectTransform>().localPosition = new Vector3(temp.x - 128.0f, middleTick.GetComponent<RectTransform>().localPosition.y, temp.z);
             }
         }
@@ -136,6 +131,6 @@ public class MoveTick : MonoBehaviour
             originalPositions[index] = ticks[index].GetComponent<RectTransform>().localPosition;
         }
         
-        middleTick.GetComponent<Image>().color = Color.blue;
+		middleTick.GetComponent<Image>().color = new Color(0,0,1,(float)(128.0/255.0));
     }
 }
