@@ -54,5 +54,7 @@ public class Player : MonoBehaviour
         //shoot backward
         GameObject newBullet = Instantiate(bulletPrefab);
         newBullet.transform.position = gameObject.transform.position;
+        newBullet.GetComponent<BulletMovement>().FireBullet(vectorToMouse.normalized * speed * 2);
     }
+
 }
