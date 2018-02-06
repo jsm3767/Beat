@@ -102,6 +102,7 @@ MonoBehaviour:
   moveSpeed: 55
   playerObject: {fileID: 0}
   alive: 1
+  started: 1
 --- !u!212 &212980475106971522
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -136,7 +137,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 6869e239315ecd84ab737cabe4077d58, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 336e4447156aff048b51ba462a5f8cb2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
