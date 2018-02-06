@@ -47,7 +47,8 @@ public class CirclingEnemy : Enemy
             distanceCorrection = -temp.normalized * (temp.magnitude - circleRadius);
         }
 
-        rb.AddForce( (perp.normalized + distanceCorrection.normalized).normalized * moveSpeed , ForceMode2D.Impulse );
+        //test different amounts of distanceCorrection
+        rb.AddForce( (perp.normalized +( distanceCorrection.normalized * .5f)).normalized * moveSpeed , ForceMode2D.Impulse );
 
 
         if( transform.position.y < -( gm.HalfHeight ) || transform.position.y > ( gm.HalfHeight ) )
