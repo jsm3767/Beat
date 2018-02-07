@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     private float halfWidth;
 
     private int shake = 0;
-    private VignetteAndChromaticAberration ChromAbb;
+    private VignetteAndChromaticAberration[] ChromAbb;
     [SerializeField] GameObject mainCamOBJ;
 
     public float HalfHeight
@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
 		audio = GetComponent<AudioSource>();
-		AudioClip currentSong = songs[2];
-		bpm = songBPM[2];
+		AudioClip currentSong = songs[3];
+		bpm = songBPM[3];
 		audio.clip = currentSong;
 		audio.Play();
 		player = playerOBJ.GetComponent<Player>();
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
         enemies = new List<Enemy>();
 		tick = FindObjectOfType<MoveTick>();
 
-        ChromAbb = mainCamOBJ.GetComponent<VignetteAndChromaticAberration>();
+		ChromAbb = mainCamOBJ.GetComponents<VignetteAndChromaticAberration>();
     }
 
     // Update is called once per frame
@@ -219,9 +219,17 @@ public class GameManager : MonoBehaviour
             Camera.main.transform.position = new Vector3(0, 0, -10);
         }
 
-        if(ChromAbb.chromaticAberration > 0)
+		ChromAbb [0].mode = VignetteAndChromaticAberration.AberrationMode.Simple;
+		ChromAbb [1].mode = VignetteAndChromaticAberration.AberrationMode.Advanced;
+
+		if(ChromAbb [0].chromaticAberration > 0)
+		{
+			ChromAbb [0].chromaticAberration-=5f;
+		}
+
+		if(ChromAbb [1].axialAberration > 0)
         {
-            ChromAbb.chromaticAberration-=5;
+			ChromAbb [1].axialAberration-=0.5f;
         }
         
     }
@@ -286,6 +294,8 @@ public class GameManager : MonoBehaviour
         timerForActivePowerUps = new List<int>();
 
         player.transform.position = new Vector3(0, 0, 0);
+
+		timer = 0;
     }
 
 
@@ -330,7 +340,8 @@ public class GameManager : MonoBehaviour
         }
 
         shake = 1;
-        ChromAbb.chromaticAberration = 30;
+		ChromAbb [0].chromaticAberration = 30;
+		ChromAbb [1].axialAberration = 5;
     }
 
     public void AddPowerUp(string powerupname, int delay)

@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public ParticleSystem gunSmoke;
 	public ParticleSystem gunSmoke2;
 
+	[SerializeField] GameObject TraceObj;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -32,6 +34,11 @@ public class Player : MonoBehaviour
        // float d = speed * Time.deltaTime;
         mousePosition = Camera.main.ScreenPointToRay( Input.mousePosition ).origin;
         vectorToMouse = mousePosition - (Vector2)transform.position;
+
+		float angle = Mathf.Atan2(vectorToMouse.y, vectorToMouse.x);
+		TraceObj.transform.position = this.transform.position;
+		TraceObj.transform.rotation = new Quaternion(0, 0, 0, 0);
+		TraceObj.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
     }
 
     public Vector3 GetPosition()
@@ -48,7 +55,7 @@ public class Player : MonoBehaviour
         this.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
 
         gunSmoke.Play();
-        Color bulletColor = new Color(Time.fixedTime % 1, Time.fixedTime / 2 % 1, Time.fixedTime / 3 % 1);
+		Color bulletColor = new Color((Time.fixedTime % 0.7f) + 0.2f, (Time.fixedTime/2 % 0.7f) + 0.2f, (Time.fixedTime/3 % 0.7f) + 0.2f);
 
         gunSmoke.startColor = bulletColor;
         gunSmoke2.startColor = bulletColor;
