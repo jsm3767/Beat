@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.ImageEffects;
+using UnityEngine.UI;
 
 public struct WaveEnemy
 {
@@ -10,6 +11,7 @@ public struct WaveEnemy
     public Vector2 spawnPosition;
     public int beat;
     public EnemyType enemyType;
+    
 
     public WaveEnemy( Vector2 spawnPosition_in, int beat_in, EnemyType enemyType_in )
     {
@@ -65,6 +67,8 @@ public class GameManager : MonoBehaviour
     private VignetteAndChromaticAberration[] ChromAbb;
     [SerializeField] GameObject mainCamOBJ;
 
+    public int score;
+    public Text scoreText;
     public float HalfHeight
     {
         get { return halfHeight; }
@@ -72,6 +76,12 @@ public class GameManager : MonoBehaviour
     public float HalfWidth
     {
         get { return halfWidth; }
+    }
+
+    public int Score
+    {
+        get { return score; }
+        set { score = value; }
     }
 
     public float Timer
@@ -94,7 +104,7 @@ public class GameManager : MonoBehaviour
 		audio.Play();
 		player = playerOBJ.GetComponent<Player>();
 		secondsPerBeat = 60.0f / bpm;
-
+        score = 0;
         enemyDictionary = new Dictionary<EnemyType, GameObject>();
         enemyDictionary.Add( EnemyType.Basic, EnemyPrefab );
         enemyDictionary.Add( EnemyType.Shooter, shooterEnemy );
@@ -107,6 +117,8 @@ public class GameManager : MonoBehaviour
 		tick = FindObjectOfType<MoveTick>();
 
 		ChromAbb = mainCamOBJ.GetComponents<VignetteAndChromaticAberration>();
+
+        scoreText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -296,6 +308,8 @@ public class GameManager : MonoBehaviour
         player.transform.position = new Vector3(0, 0, 0);
 
 		timer = 0;
+        scoreText.gameObject.SetActive(true);
+        scoreText.text = "Score: " + score;
     }
 
 
@@ -337,6 +351,7 @@ public class GameManager : MonoBehaviour
             PowerUpPulse();
             player.Pulse();
             tick.Pulse();
+            
         }
 
         shake = 1;
@@ -389,5 +404,10 @@ public class GameManager : MonoBehaviour
     public void KillPlayer()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void AddScore(int scoreIncrease)
+    {
+        score += scoreIncrease;
+        scoreText.text = "Score: " + score;
     }
 }
