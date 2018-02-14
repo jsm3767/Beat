@@ -71,6 +71,7 @@ public class Enemy : MonoBehaviour
             GameObject explOBJ = GameObject.Instantiate(explosion);
             explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
             explOBJ.transform.position = this.gameObject.transform.position;
+            alive = false;
         }
     }
 
