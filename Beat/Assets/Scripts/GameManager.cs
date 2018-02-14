@@ -227,7 +227,6 @@ public class GameManager : MonoBehaviour
             if (gameStarted)
             {
                 KillPlayer();
-				player.playGunSmoke();
             }
             else
             {
@@ -235,15 +234,20 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (shake > 0)
-        {
-            Camera.main.transform.position += ((Vector3)Random.insideUnitCircle);
-            shake--;
-        }
-        else
-        {
-            Camera.main.transform.position = new Vector3(0, 0, -10);
-        }
+		PulseCamEffects ();
+        
+    }
+
+	private void PulseCamEffects(){
+		if (shake > 0)
+		{
+			Camera.main.transform.position += ((Vector3)Random.insideUnitCircle);
+			shake--;
+		}
+		else
+		{
+			Camera.main.transform.position = new Vector3(0, 0, -10);
+		}
 
 		ChromAbb [0].mode = VignetteAndChromaticAberration.AberrationMode.Simple;
 		ChromAbb [1].mode = VignetteAndChromaticAberration.AberrationMode.Advanced;
@@ -254,11 +258,10 @@ public class GameManager : MonoBehaviour
 		}
 
 		if(ChromAbb [1].axialAberration > 0)
-        {
+		{
 			ChromAbb [1].axialAberration-=0.5f;
-        }
-        
-    }
+		}
+	}
 
     IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
     {
@@ -422,8 +425,9 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("playerscore", score);
         }
-		player.gameObject.SetActive (false);
-		player.playGunSmoke();
+		player.Die ();
+		PulseCamEffects ();
+
         StartCoroutine(ReloadLevel(1));
     }
 

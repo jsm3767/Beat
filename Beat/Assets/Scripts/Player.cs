@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public ParticleSystem gunSmoke;
 	public ParticleSystem gunSmoke2;
 
+	public bool alive = true;
+
 	[SerializeField] GameObject TraceObj;
 
     void Start()
@@ -39,7 +41,19 @@ public class Player : MonoBehaviour
 		TraceObj.transform.position = this.transform.position;
 		TraceObj.transform.rotation = new Quaternion(0, 0, 0, 0);
 		TraceObj.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
+
+		if (alive == false) {
+			Die ();
+		}
     }
+
+	public void Die(){
+		alive = false;
+		gunSmoke.Play ();
+		TraceObj.SetActive (false);
+		this.GetComponent<SpriteRenderer> ().enabled = false;
+		rb.velocity = new Vector3 (0, 0, 0);
+	}
 
     public Vector3 GetPosition()
     {
@@ -53,8 +67,7 @@ public class Player : MonoBehaviour
         float angle = Mathf.Atan2(vectorToMouse.y, vectorToMouse.x);
         this.transform.rotation = new Quaternion(0, 0, 0, 0);
         this.transform.RotateAroundLocal(new Vector3(0,0,1), angle - Mathf.PI / 2);
-
-        gunSmoke.Play();
+        
 		Color bulletColor = new Color((Time.fixedTime % 0.7f) + 0.2f, (Time.fixedTime/2 % 0.7f) + 0.2f, (Time.fixedTime/3 % 0.7f) + 0.2f);
 
         gunSmoke.startColor = bulletColor;
@@ -63,15 +76,15 @@ public class Player : MonoBehaviour
         bulletPrefab.GetComponent<SpriteRenderer>().color = bulletColor;
 
         //shoot backward
-        GameObject newBullet = Instantiate(bulletPrefab);
-        newBullet.transform.position = gameObject.transform.position;
-        newBullet.GetComponent<BulletMovement>().FireBullet(vectorToMouse.normalized * speed * 2);
-        newBullet.GetComponent<ParticleSystem>().startColor = bulletColor;
+		if (alive) {
+			gunSmoke.Play();
+
+			GameObject newBullet = Instantiate(bulletPrefab);
+			newBullet.transform.position = gameObject.transform.position;
+			newBullet.GetComponent<BulletMovement>().FireBullet(vectorToMouse.normalized * speed * 2);
+			newBullet.GetComponent<ParticleSystem>().startColor = bulletColor;
+		}
+
     }
-	public void playGunSmoke()
-	{
-		gunSmoke.Play();
-		TraceObj.gameObject.SetActive (false);
-	}
 
 }
