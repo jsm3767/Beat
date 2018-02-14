@@ -68,5 +68,10 @@ public class Player : MonoBehaviour
         newBullet.GetComponent<BulletMovement>().FireBullet(vectorToMouse.normalized * speed * 2);
         newBullet.GetComponent<ParticleSystem>().startColor = bulletColor;
     }
+	public void playGunSmoke()
+	{
+		gunSmoke.Play();
+		TraceObj.gameObject.SetActive (false);
+	}
 
 }

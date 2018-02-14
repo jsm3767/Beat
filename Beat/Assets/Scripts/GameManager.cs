@@ -227,6 +227,7 @@ public class GameManager : MonoBehaviour
             if (gameStarted)
             {
                 KillPlayer();
+				player.playGunSmoke();
             }
             else
             {
@@ -307,7 +308,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("Start Game");
 		int trackNum = difficulty;
         pointValue -= difficulty*3;
-
         AudioClip currentSong = songs[trackNum];
         bpm = songBPM[trackNum];
         audio.clip = currentSong;
@@ -422,7 +422,8 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("playerscore", score);
         }
-        
+		player.gameObject.SetActive (false);
+		player.playGunSmoke();
         StartCoroutine(ReloadLevel(1));
     }
 
