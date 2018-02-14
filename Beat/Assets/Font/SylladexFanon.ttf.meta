@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: baf6f98f9bb09cb4aa01f0114621d460
+timeCreated: 1518623526
+licenseType: Pro
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SylladexFanon
+  fontNames:
+  - SylladexFanon
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -67,8 +67,11 @@ public class GameManager : MonoBehaviour
     private VignetteAndChromaticAberration[] ChromAbb;
     [SerializeField] GameObject mainCamOBJ;
 
-    public int score;
-    public Text scoreText;
+    private int score = 0;
+    private int highScore = 0;
+    private int pointValue = 10;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text highScoreText;
     public float HalfHeight
     {
         get { return halfHeight; }
@@ -119,6 +122,17 @@ public class GameManager : MonoBehaviour
 		ChromAbb = mainCamOBJ.GetComponents<VignetteAndChromaticAberration>();
 
         scoreText.gameObject.SetActive(false);
+
+        if(PlayerPrefs.HasKey("playerscore"))
+        {
+            highScore = PlayerPrefs.GetInt("playerscore");
+        }
+        else
+        {
+            PlayerPrefs.SetInt("playerscore", highScore);
+        }
+
+        highScoreText.text = "HIGH: " + highScore;
     }
 
     // Update is called once per frame
@@ -133,12 +147,9 @@ public class GameManager : MonoBehaviour
             timer -= secondsPerBeat;
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            foreach (Enemy e in enemies)
-            {
-                e.alive = false;
-            }
+            Application.Quit();
         }
 
         List<Enemy> deadEnemies = new List<Enemy>();
@@ -152,6 +163,8 @@ public class GameManager : MonoBehaviour
 
         foreach (Enemy e in deadEnemies)
         {
+            score += pointValue;
+            scoreText.text = "" + score;
             enemies.Remove(e);
             Destroy(e.gameObject);
         }
@@ -293,6 +306,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Start Game");
 		int trackNum = difficulty;
+        pointValue -= difficulty*3;
+
         AudioClip currentSong = songs[trackNum];
         bpm = songBPM[trackNum];
         audio.clip = currentSong;
@@ -309,7 +324,6 @@ public class GameManager : MonoBehaviour
 
 		timer = 0;
         scoreText.gameObject.SetActive(true);
-        scoreText.text = "Score: " + score;
     }
 
 
@@ -403,11 +417,24 @@ public class GameManager : MonoBehaviour
 
     public void KillPlayer()
     {
+        int high = PlayerPrefs.GetInt("playerscore");
+        if(score > high)
+        {
+            PlayerPrefs.SetInt("playerscore", score);
+        }
+        
+        StartCoroutine(ReloadLevel(1));
+    }
+
+    private IEnumerator ReloadLevel(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    public void AddScore(int scoreIncrease)
+
+    public void Quit()
     {
-        score += scoreIncrease;
-        scoreText.text = "Score: " + score;
+        Application.Quit();
     }
 }
