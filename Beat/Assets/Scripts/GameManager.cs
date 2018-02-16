@@ -25,7 +25,8 @@ public enum EnemyType
 {
     Basic,
     Shooter,
-    Circling
+    Circling,
+    Floater
 }
 
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject shooterEnemy;
     public GameObject circlingEnemy;
+    public GameObject floaterEnemy;
 
     private List<Enemy> enemies;
     private MoveTick tick;
@@ -109,9 +111,11 @@ public class GameManager : MonoBehaviour
 		secondsPerBeat = 60.0f / bpm;
         score = 0;
         enemyDictionary = new Dictionary<EnemyType, GameObject>();
+
         enemyDictionary.Add( EnemyType.Basic, EnemyPrefab );
         enemyDictionary.Add( EnemyType.Shooter, shooterEnemy );
         enemyDictionary.Add( EnemyType.Circling, circlingEnemy);
+        enemyDictionary.Add( EnemyType.Floater, floaterEnemy );
 
         halfHeight = Camera.main.orthographicSize;
         halfWidth = halfHeight * ( ( (float)Screen.width / (float)Screen.height ) );
@@ -174,7 +178,25 @@ public class GameManager : MonoBehaviour
             wave++;
             //Some hardcoding, TODO change
             //for testing purposes
-            if( wave == 3 )
+            if( wave == 2 )
+            {
+                List<WaveEnemy> wave = new List<WaveEnemy>();
+
+                wave.Add( new WaveEnemy( new Vector2( -( halfWidth ), ( halfHeight / 3 ) ), 0, EnemyType.Floater ) );
+
+                wave.Add( new WaveEnemy( new Vector2( ( halfWidth ), -( halfHeight / 3 ) ), 0, EnemyType.Floater ) );
+
+                wave.Add( new WaveEnemy( new Vector2( -( halfWidth ), -( halfHeight / 3 ) ), 1, EnemyType.Floater ) );
+
+                wave.Add( new WaveEnemy( new Vector2( ( halfWidth ), +( halfHeight / 3 ) ), 1, EnemyType.Floater ) );
+                
+                wave.Add( new WaveEnemy( new Vector2( 0, +( halfHeight ) ), 2, EnemyType.Floater ) );
+                wave.Add( new WaveEnemy( new Vector2( 0, -( halfHeight ) ), 2, EnemyType.Floater ) );
+
+                StartCoroutine( SpawnWaveAsync( wave ) );
+
+            }
+            else if( wave == 3 )
             {
                 Debug.Log( halfWidth );
                 Debug.Log( halfHeight );
@@ -196,7 +218,7 @@ public class GameManager : MonoBehaviour
 
                 StartCoroutine( SpawnWaveAsync( wave1 ) );
             }
-            else if( wave == 2 )
+            else if( wave == 4 )
             {
                 List<WaveEnemy> wave2 = new List<WaveEnemy>();
                 wave2.Add(new WaveEnemy(new Vector2(0.0f, halfWidth / 5.0f),
@@ -263,6 +285,9 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+    //If no enemies are on the first beat it skips the wave due to other code
+    //instead of seeing if all enemies are dead at the current time, we should do something else such as
+    //keeping track of whether enemies of a specific wave are all dead
     IEnumerator SpawnWaveAsync( List<WaveEnemy> wave )
     {
         //int nBeats = wave.Count;
