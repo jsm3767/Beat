@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 4.0f;
+    [SerializeField] GameObject shieldSprite;
     Vector2 mousePosition;
     
     private float moveSpeed = 5.0f;
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
 	public ParticleSystem gunSmoke2;
 
 	public bool alive = true;
+    public bool isShielded = false;
 
 	[SerializeField] GameObject TraceObj;
 
@@ -58,6 +60,17 @@ public class Player : MonoBehaviour
     public Vector3 GetPosition()
     {
         return this.transform.position;
+    }
+
+    public void ActivateShield()
+    {
+        GameObject.FindGameObjectWithTag("Shield").GetComponent<SpriteRenderer>().enabled = true;
+        isShielded = true;
+    }
+    public void DectivateShield()
+    {
+        GameObject.FindGameObjectWithTag("Shield").GetComponent<SpriteRenderer>().enabled = false;
+        isShielded = false;
     }
 
     public void Pulse()

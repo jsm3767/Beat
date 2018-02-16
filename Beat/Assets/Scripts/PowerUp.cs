@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class PowerUp : MonoBehaviour {
 
-    private string powerUpType;
+    [SerializeField] private string powerUpType;
     public int beatDelay;
     private GameManager gm;
     public GameManager GM { get { return gm; } set { gm = value; } }
 
     // Use this for initialization
     void Start () {
-        powerUpType = gameObject.tag;
         gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>(); ;
 	}
 	
@@ -21,7 +20,14 @@ public class PowerUp : MonoBehaviour {
 	}
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "Bullet" || other.tag == "Enemy")
+        
+        {
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), other.GetComponent<Collider2D>());          
+            return;
+        }
         gm.AddPowerUp(powerUpType, beatDelay);
         Destroy(gameObject);
+        return;
     }
 }

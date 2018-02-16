@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     public List<string> activePowerUps;
     public List<int> timerForActivePowerUps;
     private Player player;
+    private Random rand = new Random();
 
     int wave;
 
@@ -74,6 +75,16 @@ public class GameManager : MonoBehaviour
     private int pointValue = 10;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text highScoreText;
+
+    //Things for powerups
+    [SerializeField] private Text[] PowerUpCounters;
+    [SerializeField] private Image[] PowerUpImages;
+    [SerializeField] private GameObject[] PowerUps;
+    [SerializeField] private Sprite[] PowerupSprites;
+
+    //background
+    [SerializeField] private GameObject[] Backgrounds;
+
     public float HalfHeight
     {
         get { return halfHeight; }
@@ -137,6 +148,8 @@ public class GameManager : MonoBehaviour
         }
 
         highScoreText.text = "HIGH: " + highScore;
+
+       
     }
 
     // Update is called once per frame
@@ -170,6 +183,7 @@ public class GameManager : MonoBehaviour
             score += pointValue;
             scoreText.text = "" + score;
             enemies.Remove(e);
+            SpawnPowerup(e.transform.position);
             Destroy(e.gameObject);
         }
 
@@ -243,8 +257,8 @@ public class GameManager : MonoBehaviour
                 SpawnWave();
             }
         }
-        
-        if( player.transform.position.x < -halfWidth || player.transform.position.x > halfWidth || player.transform.position.y < -halfHeight || player.transform.position.y > halfHeight )
+
+        if (player.transform.position.x < -halfWidth || player.transform.position.x > halfWidth || player.transform.position.y < -halfHeight || player.transform.position.y > halfHeight)
         {
             if (gameStarted)
             {
@@ -255,9 +269,33 @@ public class GameManager : MonoBehaviour
                 player.transform.position = new Vector3(0, 0, 0);
             }
         }
-
-		PulseCamEffects ();
+        PulseCamEffects ();
         
+    }
+
+
+    void SpawnPowerup(Vector3 position)
+    {
+        if(activePowerUps.Count < 3)
+        {
+            float randNum = Random.Range(0, 100);
+            if (randNum >= 95)
+            {
+                GameObject newPowerup = Instantiate(PowerUps[0]);
+                newPowerup.transform.position = position;
+            }
+            else if (randNum >= 80 && randNum < 85)
+            {
+                GameObject newPowerup = Instantiate(PowerUps[1]);
+                newPowerup.transform.position = position;
+            }
+            else if (randNum >= 75 && randNum < 80)
+            {
+                GameObject newPowerup = Instantiate(PowerUps[2]);
+                newPowerup.transform.position = position;
+            }
+            return;          
+        }
     }
 
 	private void PulseCamEffects(){
@@ -393,9 +431,9 @@ public class GameManager : MonoBehaviour
             PowerUpPulse();
             player.Pulse();
             tick.Pulse();
-            
         }
-
+        Backgrounds[0].GetComponent<SpriteRenderer>().enabled = !Backgrounds[0].GetComponent<SpriteRenderer>().enabled;
+        Backgrounds[1].GetComponent<SpriteRenderer>().enabled = !Backgrounds[1].GetComponent<SpriteRenderer>().enabled;
         shake = 1;
 		ChromAbb [0].chromaticAberration = 30;
 		ChromAbb [1].axialAberration = 5;
@@ -405,6 +443,83 @@ public class GameManager : MonoBehaviour
     {
         activePowerUps.Add(powerupname);
         timerForActivePowerUps.Add(delay);
+        PowerUpCounters[0].enabled = true;
+        switch (powerupname)
+        {
+            case "BulletCircle":
+                if (activePowerUps.Count == 1)
+                {
+                    PowerUpCounters[0].enabled = true;
+                    PowerUpImages[0].enabled = true;
+                    PowerUpCounters[0].text = "" + timerForActivePowerUps[0];
+                    PowerUpImages[0].sprite = PowerupSprites[0];
+                }
+                else if (activePowerUps.Count == 2)
+                {
+                    PowerUpCounters[1].enabled = true;
+                    PowerUpImages[1].enabled = true;
+                    PowerUpCounters[1].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[1].sprite = PowerupSprites[0];
+                }
+                else if (activePowerUps.Count == 3)
+                {
+                    PowerUpCounters[2].enabled = true;
+                    PowerUpImages[2].enabled = true;
+                    PowerUpCounters[2].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[2].sprite = PowerupSprites[0];
+                }
+                break;
+            case "Shield":
+                if (activePowerUps.Count == 1)
+                {
+                    PowerUpCounters[0].enabled = true;
+                    PowerUpImages[0].enabled = true;
+                    PowerUpCounters[0].text = "" + timerForActivePowerUps[0];
+                    PowerUpImages[0].sprite = PowerupSprites[1];
+                }
+                else if (activePowerUps.Count == 2)
+                {
+                    PowerUpCounters[1].enabled = true;
+                    PowerUpImages[1].enabled = true;
+                    PowerUpCounters[1].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[1].sprite = PowerupSprites[1];
+                }
+                else if (activePowerUps.Count == 3)
+                {
+                    PowerUpCounters[2].enabled = true;
+                    PowerUpImages[2].enabled = true;
+                    PowerUpCounters[2].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[2].sprite = PowerupSprites[1];
+                }
+                break;
+            case "Slow-Down":
+                if (activePowerUps.Count == 1)
+                {
+                    PowerUpCounters[0].enabled = true;
+                    PowerUpImages[0].enabled = true;
+                    PowerUpCounters[0].text = "" + timerForActivePowerUps[0];
+                    PowerUpImages[0].sprite = PowerupSprites[2];
+                }
+                else if (activePowerUps.Count == 2)
+                {
+                    PowerUpCounters[1].enabled = true;
+                    PowerUpImages[1].enabled = true;
+                    PowerUpCounters[1].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[1].sprite = PowerupSprites[2];
+                }
+                else if (activePowerUps.Count == 3)
+                {
+                    PowerUpCounters[2].enabled = true;
+                    PowerUpImages[2].enabled = true;
+                    PowerUpCounters[2].text = "" + timerForActivePowerUps[1];
+                    PowerUpImages[2].sprite = PowerupSprites[2];
+                }
+                foreach(Enemy a in enemies)
+                {
+                    a.GetComponent<Rigidbody2D>().mass = 3;
+                }
+                break;
+        }
     }
 
 
@@ -412,24 +527,31 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < activePowerUps.Count; i++)
         {
-            if (timerForActivePowerUps[i] > 0)
+            if (timerForActivePowerUps[i] > 1)
             {
-                timerForActivePowerUps[i]--;
-                Debug.Log(timerForActivePowerUps[i]);
+                timerForActivePowerUps[i]--;         
             }
             else
             {
                 switch (activePowerUps[i])
                 {
-                    case "TestPowerUp":
+                    case "BulletCircle":
                         for (int d = 0; d < 8; d++)
                         {
                             GameObject newbullet = Instantiate(bulletprefab);
                             Vector3 newPos = new Vector3(0, 1, 0);
                             newPos = Quaternion.AngleAxis(45 * d, Vector3.forward) * newPos;
                             newbullet.transform.position = player.transform.position + (newPos * 2);
-                            Debug.Log(newPos.x);
-                            newbullet.GetComponent<BulletMovement>().FireBullet(newPos * 100);
+                            newbullet.GetComponent<BulletMovement>().FireBullet(newPos * 100);                 
+                        }
+                        break;
+                    case "Shield":
+                        player.ActivateShield();
+                        break;
+                    case "Slow-Down":
+                        foreach(Enemy e in enemies)
+                        {
+                            e.GetComponent<Rigidbody2D>().mass = 1;
                         }
                         break;
                 }
@@ -438,8 +560,44 @@ public class GameManager : MonoBehaviour
                 i--;
             }
         }
-        for (int i = 0; i < activePowerUps.Count; i++)
+
+        for(int i = 0; i < activePowerUps.Count; i++)
         {
+            PowerUpCounters[i].text = "" + timerForActivePowerUps[i];
+            switch (activePowerUps[i])
+            {
+                case "BulletCircle":
+                    PowerUpImages[i].sprite = PowerupSprites[0];
+                    break;
+                case "Shield":
+                    PowerUpImages[i].sprite = PowerupSprites[1];
+                    break;
+                case "Slow-Down":
+                    PowerUpImages[i].sprite = PowerupSprites[2];
+                    break;
+            }
+
+        }
+        if (activePowerUps.Count == 0)
+        {
+            PowerUpCounters[0].enabled = false;
+            PowerUpImages[0].enabled = false;
+            PowerUpCounters[1].enabled = false;
+            PowerUpImages[1].enabled = false;
+            PowerUpCounters[2].enabled = false;
+            PowerUpImages[2].enabled = false;
+        }
+        if (activePowerUps.Count == 1)
+        {
+            PowerUpCounters[1].enabled = false;
+            PowerUpImages[1].enabled = false;
+            PowerUpCounters[2].enabled = false;
+            PowerUpImages[2].enabled = false;
+        }
+        if (activePowerUps.Count == 2)
+        {
+            PowerUpCounters[2].enabled = false;
+            PowerUpImages[2].enabled = false;
         }
     }
 

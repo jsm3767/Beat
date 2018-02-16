@@ -8,6 +8,9 @@ TagManager:
   - Bullet
   - Tick
   - gunsmoke2
+  - GameManager
+  - TestPowerUp
+  - Shield
   layers:
   - Default
   - TransparentFX

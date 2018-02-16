@@ -67,11 +67,22 @@ public class Enemy : MonoBehaviour
         }
         else if( other.gameObject.tag == "Player" )
         {
-            gm.KillPlayer();
-            GameObject explOBJ = GameObject.Instantiate(explosion);
-            explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
-            explOBJ.transform.position = this.gameObject.transform.position;
-            alive = false;
+            if (other.GetComponent<Player>().isShielded)
+            {
+                alive = false;
+                other.GetComponent<Player>().DectivateShield();
+                GameObject explOBJ = GameObject.Instantiate(explosion);
+                explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+                explOBJ.transform.position = this.gameObject.transform.position;
+            }
+            else
+            {
+                gm.KillPlayer();
+                GameObject explOBJ = GameObject.Instantiate(explosion);
+                explOBJ.GetComponent<ParticleSystem>().startColor = this.gameObject.GetComponent<SpriteRenderer>().color;
+                explOBJ.transform.position = this.gameObject.transform.position;
+                alive = false;
+            }
         }
     }
 
