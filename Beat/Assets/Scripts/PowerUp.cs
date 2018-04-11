@@ -20,7 +20,7 @@ public class PowerUp : MonoBehaviour {
 	}
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Bullet" || other.tag == "Enemy")
+        if (other.tag == "Enemy")
         
         {
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), other.GetComponent<Collider2D>());          
